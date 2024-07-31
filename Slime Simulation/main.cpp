@@ -20,7 +20,7 @@ struct ant {
 	ant() : x(0), y(0), angle(0) {}
 };
 
-const int targetFPS = 50;
+const int targetFPS = 60;
 const std::chrono::milliseconds frameDuration(1000 / targetFPS);
 
 float randomFloat(float min, float max) {

@@ -5,10 +5,10 @@
 #include <curand_kernel.h>
 
 constexpr int sensorOffsetDst = 5;
-constexpr int sensorSize = 5;
+constexpr int sensorSize = 4;
 constexpr float turnSpeed = 1.2;
 constexpr float lerpRate = 1.5;
-constexpr float speed = 1;
+constexpr float speed = .5;
 constexpr float fadeFactor = .99;
 constexpr float diffuseRate = .01;
 constexpr float decayRate = .5;

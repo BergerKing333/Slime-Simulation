@@ -23,8 +23,7 @@ __device__ float sense(float* antPosition, float angleOffset, uchar1* image, int
 			int2 pos = make_int2(sensorCenter.x + offsetX, sensorCenter.y + offsetY);
 
             if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height) continue;
-            uchar1 pixel = image[pos.y * width + pos.x];
-            sum += pixel.x;
+            sum += image[pos.y * width + pos.x].x;
 		}
 	}
 
@@ -62,22 +61,22 @@ __global__ void diffuseKernel(uchar1* image, uchar1* imageOutput, int width, int
     int idy = blockIdx.y * blockDim.y + threadIdx.y;
     if (idx < 0 || idx >= width || idy < 0 || idy >= height) return;
 
-    float1 sum = make_float1(0);
-    float1 originalPixel = make_float1(image[idy * width + idx].x);
+    float sum = 0;
+    float originalPixel = image[idy * width + idx].x;
 
     for (int offsetX = -1; offsetX <= 1; ++offsetX) {
         for (int offsetY = -1; offsetY <= 1; ++offsetY) {
             int x = min(width - 1, max(0, idx + offsetX));
             int y = min(height - 1, max(0, idy + offsetY));
             uchar1 pixel = image[y * width + x];
-            sum.x += pixel.x;
+            sum += pixel.x;
         }
     }
-    sum.x /= 9;
-    float1 blurredCol = make_float1(originalPixel.x * (1 - diffuseRate) + sum.x * diffuseRate);
-    blurredCol.x = max(0.0f, blurredCol.x - decayRate);
-    
-    imageOutput[idy * width + idx] = make_uchar1(blurredCol.x);
+    sum /= 9;
+    float blurredCol = originalPixel * (1 - diffuseRate) + originalPixel * diffuseRate;
+    blurredCol = max(0.0f, blurredCol - decayRate);
+   
+    imageOutput[idy * width + idx] = make_uchar1(blurredCol);
 }
 
 __global__ void blurImageKernel(uchar1* imageInput, uchar1* imageOutput, int width, int height) {
@@ -105,9 +104,10 @@ __global__ void blurImageKernel(uchar1* imageInput, uchar1* imageOutput, int wid
 __global__ void drawAntsKernel(uchar1* image, int width, int height, float* antPositions, int numAnts) {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= numAnts) return;
-    int x = static_cast<int>(antPositions[idx * 3]);
-    int y = static_cast<int>(antPositions[idx * 3 + 1]);
-    image[y * width + x] = make_uchar1(255);
+    // int x = static_cast<int>(antPositions[idx * 3]);
+    int x = antPositions[idx * 3];
+    int y = antPositions[idx * 3 + 1];
+    image[y * width + x].x = min(255, image[y*width +x].x + 100);
 }
 
 __global__ void updateAntPositionKernel(curandState* state, float* antPosition, int numAnts, int width, int height, uchar1* image) {
