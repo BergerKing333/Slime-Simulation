@@ -31,14 +31,14 @@ float randomFloat(float min, float max) {
 
 int main() {
 	// Define constants
-	Mat image = Mat::zeros(width, height, CV_8UC3);
+	Mat image = Mat::zeros(width, height, CV_8UC1);
 	
 	ant* antPosition = new ant[numberOfAnts];
 
 	// Setup image on GPU
-	uchar3* gpuImage;
-	uchar3* tempImage;
-	size_t size = width * height * sizeof(uchar3);
+	uchar1* gpuImage;
+	uchar1* tempImage;
+	size_t size = width * height * sizeof(uchar);
 	cudaMalloc(&gpuImage, size);
 	cudaMemcpy(gpuImage, image.data, size, cudaMemcpyHostToDevice);
 	cudaMalloc(&tempImage, size);

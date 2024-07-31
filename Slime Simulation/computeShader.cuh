@@ -19,21 +19,21 @@ constexpr const float twoPi = 2 * 3.14159265;
 constexpr const int numberOfAnts = 100000;
 
 
-__global__ void fadeImageKernel(uchar3* image, int rows, int cols);
+__global__ void fadeImageKernel(uchar1* image, int rows, int cols);
 
-__global__ void drawAntsKernel(uchar3* image, int rows, int cols, float* antPositions, int numAnts);
+__global__ void drawAntsKernel(uchar1* image, int rows, int cols, float* antPositions, int numAnts);
 
-__global__ void updateAntPositionKernel(curandState* state, float* antPositions, int numAnts, int width, int height, uchar3* image);
+__global__ void updateAntPositionKernel(curandState* state, float* antPositions, int numAnts, int width, int height, uchar1* image);
 
 __global__ void setupCurand(curandState* state, unsigned long seed);
 
 __device__ float randomFloatKernel(curandState* state, float min, float max);
 
-__device__ uchar3 lerp(uchar3 a, uchar3 b, float t);
+__device__ uchar1 lerp(uchar1 a, uchar1 b, float t);
 
-__global__ void blurImageKernel(uchar3* imageInput, uchar3* imageOutput, int width, int height);
+__global__ void blurImageKernel(uchar1* imageInput, uchar1* imageOutput, int width, int height);
 
-__global__ void diffuseKernel(uchar3* imageInput, uchar3* imageOutput, int width, int height);
+__global__ void diffuseKernel(uchar1* imageInput, uchar1* imageOutput, int width, int height);
 
 __global__ void convertColorToGradient(uchar3* image, int width, int height);
 
