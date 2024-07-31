@@ -6,7 +6,7 @@
 
 constexpr int sensorOffsetDst = 5;
 constexpr int sensorSize = 5;
-constexpr float turnSpeed = .9;
+constexpr float turnSpeed = 1.2;
 constexpr float lerpRate = 1.5;
 constexpr float speed = 1;
 constexpr float fadeFactor = .99;

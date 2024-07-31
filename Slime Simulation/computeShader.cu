@@ -173,7 +173,7 @@ __global__ void convertColorToGradient(uchar3* image, int width, int height) {
 
     float intensity = pixel.x;
 
-    uchar3 newPixel = make_uchar3(255 - intensity, 255 - intensity, 0);
+    uchar3 newPixel = make_uchar3(intensity, intensity / 5, 0);
 
-	image[idy * width + idx] = make_uchar3(pixel.x, pixel.y, pixel.z);
+	image[idy * width + idx] = newPixel;
 }
